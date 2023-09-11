@@ -16,3 +16,11 @@ var firebaseStorage = FirebaseStorage.instance;
 var firestore = FirebaseFirestore.instance;
 
 var authController = AuthController.instance;
+
+const pages = [
+  Text('Home'),
+  Text('Search'),
+  Text('Add page'),
+  Text('Message'),
+  Text('Profile'),
+];
