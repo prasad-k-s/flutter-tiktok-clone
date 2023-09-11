@@ -10,7 +10,8 @@ class TextInputField extends StatelessWidget {
       this.isObscure = false,
       required this.validator,
       required this.keyboardType,
-      required this.textInputAction});
+      required this.textInputAction,
+});
   final TextEditingController controller;
   final String labelText;
   final IconData icon;

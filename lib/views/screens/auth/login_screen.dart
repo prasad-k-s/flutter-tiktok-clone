@@ -11,7 +11,12 @@ class LoginScreen extends StatelessWidget {
 
   void login() {
     final isValid = _myFormKey.currentState!.validate();
-    if (isValid) {}
+    if (isValid) {
+      authController.loginUser(
+        _emailController.text,
+        _passWordController.text,
+      );
+    }
   }
 
   @override

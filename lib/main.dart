@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 import 'package:flutter_tiktok_clone/controllers/auth_controllers.dart';
-import 'package:flutter_tiktok_clone/views/screens/auth/signup_screen.dart';
+import 'package:flutter_tiktok_clone/views/screens/auth/login_screen.dart';
 import 'package:get/get.dart';
 
 Future<void> main() async {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
       ),
-      home: SignUp(),
+      home: LoginScreen(),
     );
   }
 }

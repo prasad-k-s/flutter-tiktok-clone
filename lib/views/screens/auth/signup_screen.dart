@@ -2,6 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 import 'package:flutter_tiktok_clone/views/widgets/text_input_filed.dart';
+import 'package:get/get.dart';
+import 'package:regexpattern/regexpattern.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -10,9 +12,28 @@ class SignUp extends StatelessWidget {
   final TextEditingController _userNameController = TextEditingController();
 
   final _myFormKey = GlobalKey<FormState>();
-  void login() {
+  void register() {
     final isValid = _myFormKey.currentState!.validate();
-    if (isValid) {}
+    if (authController.isImagePicked == false) {
+      Get.snackbar(
+        'Profile Picture',
+        'Please select a profile picture',
+        icon: const Icon(
+          Icons.warning,
+          color: Colors.red,
+          size: 35,
+        ),
+      );
+    }
+
+    if (isValid && authController.isImagePicked) {
+      authController.register(
+        _userNameController.text,
+        _emailController.text,
+        _passWordController.text,
+        authController.profilePhoto,
+      );
+    }
   }
 
   @override
@@ -58,7 +79,7 @@ class SignUp extends StatelessWidget {
                         left: 80,
                         bottom: -10,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () => authController.pickImage(),
                           icon: const Icon(Icons.add_a_photo),
                         ),
                       ),
@@ -78,12 +99,17 @@ class SignUp extends StatelessWidget {
                             controller: _userNameController,
                             labelText: 'Username',
                             icon: Icons.lock,
-                            isObscure: true,
                             keyboardType: TextInputType.name,
                             textInputAction: TextInputAction.next,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your user name';
+                              }
+                              if (value.length < 4) {
+                                return 'Username must contain atleast 4 characters';
+                              }
+                              if (value.isUsername() == false) {
+                                return 'Please enter a valid user name';
                               }
                               return null;
                             },
@@ -129,15 +155,35 @@ class SignUp extends StatelessWidget {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter your password';
                               }
+                              if (value.length < 8) {
+                                return 'Password must contain atleast 8 characters';
+                              }
+                              if (value.isPasswordHardWithspace() == false) {
+                                return 'Please enter a valid password';
+                              }
                               return null;
                             },
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: const Text(
+                            'Must contain at least: 1 uppercase letter,1 lowecase letter,1 number,1 special character and Minimum 8 characters.',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ),
                         const SizedBox(
                           height: 25,
                         ),
                         GestureDetector(
-                          onTap: login,
+                          onTap: register,
                           child: Container(
                             width: MediaQuery.of(context).size.width - 40,
                             height: 50,
