@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/controllers/auth_controllers.dart';
+import 'package:flutter_tiktok_clone/views/screens/add_screen.dart';
 
 const backgroundColor = Colors.black;
 var buttonColor = Colors.red[400];
@@ -20,7 +21,7 @@ var authController = AuthController.instance;
 const pages = [
   Text('Home'),
   Text('Search'),
-  Text('Add page'),
+  AddVideoScreen(),
   Text('Message'),
   Text('Profile'),
 ];
