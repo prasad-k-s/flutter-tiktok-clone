@@ -14,18 +14,22 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   void initState() {
     super.initState();
-    videoPlayerController = VideoPlayerController.networkUrl(
-      Uri.parse(widget.videoUrl),
-    )..initialize().then((value) {
-        videoPlayerController.play();
-        videoPlayerController.setVolume(1);
-      });
+    initializeVideo();
   }
 
   @override
   void dispose() {
     super.dispose();
     videoPlayerController.dispose();
+  }
+
+  Future<void> initializeVideo() async {
+    videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
+    await videoPlayerController.initialize();
+    videoPlayerController.play();
+    videoPlayerController.setLooping(true);
+    videoPlayerController.setVolume(1);
+    setState(() {});
   }
 
   @override
@@ -36,12 +40,16 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
       height: size.height,
       decoration: const BoxDecoration(color: Colors.black),
       child: Center(
-        child: AspectRatio(
-          aspectRatio: videoPlayerController.value.aspectRatio,
-          child: VideoPlayer(
-            videoPlayerController,
-          ),
-        ),
+        child: videoPlayerController.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: videoPlayerController.value.aspectRatio,
+                child: VideoPlayer(
+                  videoPlayerController,
+                ),
+              )
+            : const CircularProgressIndicator(
+                color: Colors.red,
+              ),
       ),
     );
   }

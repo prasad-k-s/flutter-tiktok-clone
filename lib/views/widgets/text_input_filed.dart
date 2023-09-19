@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 
 class TextInputField extends StatelessWidget {
-  const TextInputField(
-      {super.key,
-      required this.controller,
-      required this.labelText,
-      required this.icon,
-      this.isObscure = false,
-      required this.validator,
-      required this.keyboardType,
-      required this.textInputAction,
-});
+  const TextInputField({
+    super.key,
+    required this.controller,
+    required this.labelText,
+    required this.icon,
+    this.isObscure = false,
+    required this.validator,
+    required this.keyboardType,
+    required this.textInputAction,
+    required this.isPassword, required this.onTapIcon,
+  });
   final TextEditingController controller;
   final String labelText;
   final IconData icon;
   final bool isObscure;
+  final bool isPassword;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
+  final VoidCallback onTapIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,14 @@ class TextInputField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: Icon(icon),
+        suffixIcon: isPassword
+            ? GestureDetector(
+                onTap: onTapIcon,
+                child: Icon(
+                  isObscure ? Icons.visibility_off : Icons.visibility,
+                ),
+              )
+            : null,
         floatingLabelStyle: const TextStyle(
           fontSize: 20,
           color: blueColor,

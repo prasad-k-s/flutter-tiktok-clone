@@ -25,15 +25,14 @@ class CommentScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: SizedBox(
-          width: size.width,
-          height: size.height,
+        child: SafeArea(
           child: Column(
             children: [
-              Expanded(
-                child: Obx(
-                  () {
-                    return ListView.builder(
+              Obx(
+                () {
+                  return SizedBox(
+                    height: size.height * 0.75,
+                    child: ListView.builder(
                       itemCount: commentController.comments.length,
                       itemBuilder: (context, index) {
                         final comment = commentController.comments[index];
@@ -95,9 +94,9 @@ class CommentScreen extends StatelessWidget {
                           ),
                         );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
               const Divider(),
               ListTile(

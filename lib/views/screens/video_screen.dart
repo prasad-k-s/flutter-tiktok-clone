@@ -42,34 +42,24 @@ class VideoScreen extends StatelessWidget {
   }
 
   buildMusicAlbum(String profilePhoto) {
-    return SizedBox(
-      width: 60,
-      height: 60,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(11),
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Colors.grey,
-                  Colors.black,
-                ],
-              ),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Image(
-                  image: Image.network(
-                profilePhoto,
-                fit: BoxFit.cover,
-              ).image),
-            ),
+    return Container(
+      padding: const EdgeInsets.all(11),
+      height: 50,
+      width: 50,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Colors.grey,
+            Colors.black,
+          ],
+        ),
+        image: DecorationImage(
+          image: NetworkImage(
+            profilePhoto,
           ),
-        ],
+          fit: BoxFit.cover,
+        ),
+        borderRadius: BorderRadius.circular(25),
       ),
     );
   }
@@ -206,28 +196,6 @@ class VideoScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       data.commentCount.toString(),
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: () {},
-                                      child: const Icon(
-                                        Icons.reply,
-                                        size: 40,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 7,
-                                    ),
-                                    Text(
-                                      data.shareCount.toString(),
                                       style: const TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,

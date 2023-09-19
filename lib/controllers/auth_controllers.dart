@@ -26,7 +26,7 @@ class AuthController extends GetxController {
 
   _setInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => LoginScreen());
+      Get.offAll(() => const LoginScreen());
     } else {
       Get.offAll(() => const HomeScreen());
     }
@@ -34,8 +34,9 @@ class AuthController extends GetxController {
 
   late Rx<File?> _pickedImage;
   File? get profilePhoto => _pickedImage.value;
+
   bool isImagePicked = false;
-  void pickImage() async {
+  Future<bool> pickImage() async {
     final pickedImage = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       Get.snackbar(
@@ -53,6 +54,7 @@ class AuthController extends GetxController {
           pickedImage.path,
         ),
       );
+      return true;
     } else {
       isImagePicked = false;
       Get.snackbar(
@@ -64,6 +66,7 @@ class AuthController extends GetxController {
           size: 35,
         ),
       );
+      return false;
     }
   }
 
@@ -77,7 +80,7 @@ class AuthController extends GetxController {
     return downloadUrl;
   }
 
-  void register(String username, String email, String password, File? image) async {
+  Future<void> register(String username, String email, String password, File? image) async {
     try {
       if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty && image != null) {
         UserCredential credential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
@@ -103,7 +106,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void loginUser(String email, String password) async {
+  Future<void> loginUser(String email, String password) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
         await firebaseAuth.signInWithEmailAndPassword(email: email, password: password);

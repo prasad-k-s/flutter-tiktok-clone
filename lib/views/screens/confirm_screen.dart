@@ -78,6 +78,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                         },
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
+                        isPassword: false, onTapIcon: () {  },
                       ),
                     ),
                     const SizedBox(
@@ -95,6 +96,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                         },
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
+                        isPassword: false, onTapIcon: () {  },
                       ),
                     ),
                     const SizedBox(

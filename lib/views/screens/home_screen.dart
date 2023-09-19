@@ -39,10 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message, size: 30),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person, size: 30),
             label: 'Profile',
           ),
