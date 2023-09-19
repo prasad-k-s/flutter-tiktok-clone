@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 import 'package:flutter_tiktok_clone/controllers/video_controller.dart';
@@ -24,14 +25,22 @@ class VideoScreen extends StatelessWidget {
               height: 50,
               padding: const EdgeInsets.all(1),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.grey,
                 borderRadius: BorderRadius.circular(25),
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(25),
-                child: Image(
-                  image: Image.network(profilePhoto).image,
+                child: CachedNetworkImage(
+                  imageUrl: profilePhoto,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  errorWidget: (context, url, error) => const Center(
+                    child: Icon(
+                      Icons.error,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -42,24 +51,24 @@ class VideoScreen extends StatelessWidget {
   }
 
   buildMusicAlbum(String profilePhoto) {
-    return Container(
-      padding: const EdgeInsets.all(11),
-      height: 50,
-      width: 50,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Colors.grey,
-            Colors.black,
-          ],
-        ),
-        image: DecorationImage(
-          image: NetworkImage(
-            profilePhoto,
-          ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(25),
+      child: Container(
+        color: Colors.grey,
+        child: CachedNetworkImage(
+          height: 50,
+          width: 50,
           fit: BoxFit.cover,
+          imageUrl: profilePhoto,
+          placeholder: (context, url) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => const Center(
+            child: Icon(
+              Icons.error,
+            ),
+          ),
         ),
-        borderRadius: BorderRadius.circular(25),
       ),
     );
   }

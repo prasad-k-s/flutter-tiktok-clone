@@ -35,21 +35,26 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: const BoxDecoration(color: Colors.black),
-      child: Center(
-        child: videoPlayerController.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: videoPlayerController.value.aspectRatio,
-                child: VideoPlayer(
-                  videoPlayerController,
+    return GestureDetector(
+      onTap: () {
+        videoPlayerController.value.isPlaying ? videoPlayerController.pause() : videoPlayerController.play();
+      },
+      child: Container(
+        width: size.width,
+        height: size.height,
+        decoration: const BoxDecoration(color: Colors.black),
+        child: Center(
+          child: videoPlayerController.value.isInitialized || videoPlayerController.value.isBuffering
+              ? AspectRatio(
+                  aspectRatio: videoPlayerController.value.aspectRatio,
+                  child: VideoPlayer(
+                    videoPlayerController,
+                  ),
+                )
+              : const CircularProgressIndicator(
+                  color: Colors.red,
                 ),
-              )
-            : const CircularProgressIndicator(
-                color: Colors.red,
-              ),
+        ),
       ),
     );
   }

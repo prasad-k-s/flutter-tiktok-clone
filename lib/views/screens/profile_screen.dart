@@ -189,26 +189,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                // child: InkWell(
-                                //   onTap: () {
-                                //     if (widget.uid == authController.user.uid) {
-                                //       authController.signOut();
-                                //     } else {
-                                //       controller.followUser();
-                                //     }
-                                //   },
-                                //   child: Text(
-                                //     widget.uid == authController.user.uid
-                                //         ? 'Sign Out'
-                                //         : controller.user['isFollowing']
-                                //             ? 'Unfollow'
-                                //             : 'Follow',
-                                //     style: const TextStyle(
-                                //       fontSize: 15,
-                                //       fontWeight: FontWeight.bold,
-                                //     ),
-                                //   ),
-                                // ),
                               ),
                             ),
                           ),
@@ -230,6 +210,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               return CachedNetworkImage(
                                 imageUrl: thumbnail,
                                 fit: BoxFit.cover,
+                                placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.error,
+                                ),
                               );
                             },
                           )

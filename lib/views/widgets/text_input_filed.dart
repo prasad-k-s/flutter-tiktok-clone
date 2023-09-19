@@ -11,7 +11,8 @@ class TextInputField extends StatelessWidget {
     required this.validator,
     required this.keyboardType,
     required this.textInputAction,
-    required this.isPassword, required this.onTapIcon,
+    required this.isPassword,
+    required this.onTapIcon,
   });
   final TextEditingController controller;
   final String labelText;
