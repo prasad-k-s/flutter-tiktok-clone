@@ -2,8 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 import 'package:flutter_tiktok_clone/models/video.dart';
+import 'package:flutter_tiktok_clone/views/screens/video_screen.dart';
 import 'package:get/get.dart';
 import 'package:video_compress/video_compress.dart';
 
@@ -37,7 +39,7 @@ class UploadVideoController extends GetxController {
     return downloadUrl;
   }
 
-  uploadVideo(String songName, String caption, String videoPath) async {
+  Future<void> uploadVideo(String songName, String caption, String videoPath, BuildContext context) async {
     try {
       String uid = firebaseAuth.currentUser!.uid;
       DocumentSnapshot userDoc = await firestore.collection('users').doc(uid).get();
@@ -64,7 +66,15 @@ class UploadVideoController extends GetxController {
       await firestore.collection('videos').doc('Video $len').set(
             video.toJson(),
           );
-      Get.back();
+      if (context.mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return VideoScreen();
+            },
+          ),
+        );
+      }
     } catch (e) {
       print(e);
       Get.snackbar(
