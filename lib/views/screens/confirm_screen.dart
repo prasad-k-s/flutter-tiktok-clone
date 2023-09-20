@@ -21,15 +21,17 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
   final TextEditingController captionController = TextEditingController();
   @override
   void initState() {
+    initializeVideo();
     super.initState();
-    setState(() {
-      controller = VideoPlayerController.file(widget.videoFile);
-    });
+  }
 
-    controller.initialize();
+  void initializeVideo() async {
+    controller = VideoPlayerController.file(widget.videoFile);
+    await controller.initialize();
     controller.play();
-    controller.setVolume(0.5);
+    controller.setVolume(1);
     controller.setLooping(true);
+    setState(() {});
   }
 
   @override
@@ -40,6 +42,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
     songController.dispose();
   }
 
+  final myKey = GlobalKey<FormState>();
   UploadVideoController uploadVideoController = Get.put(UploadVideoController());
   @override
   Widget build(BuildContext context) {
@@ -52,10 +55,14 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height / 1.5,
                 child: Center(
-                  child: AspectRatio(
-                    aspectRatio: controller.value.aspectRatio,
-                    child: VideoPlayer(controller),
-                  ),
+                  child: controller.value.isInitialized
+                      ? AspectRatio(
+                          aspectRatio: controller.value.aspectRatio,
+                          child: VideoPlayer(controller),
+                        )
+                      : const CircularProgressIndicator(
+                          color: Colors.red,
+                        ),
                 ),
               ),
               const SizedBox(
@@ -63,62 +70,84 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
               ),
               SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10),
-                      width: MediaQuery.of(context).size.width - 20,
-                      child: TextInputField(
-                        controller: songController,
-                        labelText: 'Song Name',
-                        icon: Icons.music_note,
-                        validator: (_) {
-                          return null;
-                        },
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.next,
-                        isPassword: false, onTapIcon: () {  },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10),
-                      width: MediaQuery.of(context).size.width - 20,
-                      child: TextInputField(
-                        controller: captionController,
-                        labelText: 'Caption',
-                        icon: Icons.closed_caption,
-                        validator: (_) {
-                          return null;
-                        },
-                        keyboardType: TextInputType.name,
-                        textInputAction: TextInputAction.done,
-                        isPassword: false, onTapIcon: () {  },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        uploadVideoController.uploadVideo(
-                          songController.text,
-                          captionController.text,
-                          widget.videoPath,
-                        );
-                      },
-                      child: const Text(
-                        'Share!',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
+                child: Form(
+                  key: myKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        width: MediaQuery.of(context).size.width - 20,
+                        child: TextInputField(
+                          controller: songController,
+                          labelText: 'Song Name',
+                          icon: Icons.music_note,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter song name';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          isPassword: false,
+                          onTapIcon: () {},
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10, right: 10),
+                        width: MediaQuery.of(context).size.width - 20,
+                        child: TextInputField(
+                          controller: captionController,
+                          labelText: 'Caption',
+                          icon: Icons.closed_caption,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter caption';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.done,
+                          isPassword: false,
+                          onTapIcon: () {},
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ElevatedButton(
+                        onPressed: () async {
+                          final isValid = myKey.currentState!.validate();
+                          if (isValid) {
+                            await Future.delayed(
+                              const Duration(
+                                seconds: 2,
+                              ),
+                            );
+                            if (mounted) {
+                              await uploadVideoController.uploadVideo(
+                                songController.text,
+                                captionController.text,
+                                widget.videoPath,
+                                context,
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          'Share!',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
