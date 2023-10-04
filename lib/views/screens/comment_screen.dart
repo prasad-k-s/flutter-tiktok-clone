@@ -9,7 +9,7 @@ class CommentScreen extends StatelessWidget {
   CommentScreen({super.key, required this.id});
   final TextEditingController _commentController = TextEditingController();
   final CommentController commentController = Get.put(CommentController());
-
+  final myKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     commentController.updatePostId(id);
@@ -38,7 +38,7 @@ class CommentScreen extends StatelessWidget {
                         final comment = commentController.comments[index];
                         return ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.grey,
                             backgroundImage: NetworkImage(comment.profilePhoto),
                           ),
                           title: Row(
@@ -100,32 +100,37 @@ class CommentScreen extends StatelessWidget {
               ),
               const Divider(),
               ListTile(
-                title: TextFormField(
-                  controller: _commentController,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                  decoration: const InputDecoration(
-                    labelText: 'comment',
-                    labelStyle: TextStyle(
-                      fontSize: 20,
+                title: Form(
+                  key: myKey,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter something';
+                      }
+                      return null;
+                    },
+                    controller: _commentController,
+                    style: const TextStyle(
+                      fontSize: 16,
                       color: Colors.white,
                     ),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.red,
-                      ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.red,
-                      ),
-                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: const InputDecoration(
+                        hintText: 'comment',
+                        hintStyle: TextStyle(
+                          fontSize: 20,
+                        ),
+                        border: InputBorder.none,
+                        filled: true),
                   ),
                 ),
-                trailing: TextButton(
-                  onPressed: () => commentController.postComment(_commentController.text),
+                trailing: GestureDetector(
+                  onTap: () {
+                    final isValid = myKey.currentState!.validate();
+                    if (isValid) {
+                      commentController.postComment(_commentController.text);
+                    }
+                  },
                   child: const Text(
                     'Send',
                     style: TextStyle(

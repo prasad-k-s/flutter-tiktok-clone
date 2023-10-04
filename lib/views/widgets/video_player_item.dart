@@ -37,23 +37,37 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        videoPlayerController.value.isPlaying ? videoPlayerController.pause() : videoPlayerController.play();
+        setState(() {
+          videoPlayerController.value.isPlaying ? videoPlayerController.pause() : videoPlayerController.play();
+        });
       },
       child: Container(
         width: size.width,
         height: size.height,
         decoration: const BoxDecoration(color: Colors.black),
-        child: Center(
-          child: videoPlayerController.value.isInitialized || videoPlayerController.value.isBuffering
-              ? AspectRatio(
-                  aspectRatio: videoPlayerController.value.aspectRatio,
-                  child: VideoPlayer(
-                    videoPlayerController,
-                  ),
-                )
-              : const CircularProgressIndicator(
-                  color: Colors.red,
+        child: Stack(
+          children: [
+            Center(
+              child: videoPlayerController.value.isInitialized || videoPlayerController.value.isBuffering
+                  ? AspectRatio(
+                      aspectRatio: videoPlayerController.value.aspectRatio,
+                      child: VideoPlayer(
+                        videoPlayerController,
+                      ),
+                    )
+                  : const CircularProgressIndicator(
+                      color: Colors.red,
+                    ),
+            ),
+            if (!videoPlayerController.value.isPlaying && videoPlayerController.value.isInitialized)
+              const Center(
+                child: Icon(
+                  Icons.play_arrow,
+                  size: 100,
+                  color: Colors.white,
                 ),
+              ),
+          ],
         ),
       ),
     );

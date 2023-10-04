@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tiktok_clone/constants.dart';
 import 'package:flutter_tiktok_clone/models/video.dart';
-import 'package:flutter_tiktok_clone/views/screens/video_screen.dart';
 import 'package:get/get.dart';
 import 'package:video_compress/video_compress.dart';
 
@@ -66,15 +65,7 @@ class UploadVideoController extends GetxController {
       await firestore.collection('videos').doc('Video $len').set(
             video.toJson(),
           );
-      if (context.mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) {
-              return VideoScreen();
-            },
-          ),
-        );
-      }
+      Get.snackbar('Success', 'Video uploaded successfully');
     } catch (e) {
       print(e);
       Get.snackbar(

@@ -24,6 +24,6 @@ var authController = AuthController.instance;
 final pages = [
   VideoScreen(),
   const AddVideoScreen(),
-  SearchScreen(),
+  const SearchScreen(),
   ProfileScreen(uid: authController.user.uid),
 ];
